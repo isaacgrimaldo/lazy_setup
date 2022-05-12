@@ -49,16 +49,14 @@ export const GenerateProjectTSC = async (prop: GlobalOptions) => {
         console.log('move at the new directory "cd ' + name + '"' + '\n');
     } catch (error) {
         console.log(error);
-        const checkDirs: string[] = await fs.readdir(newPath);
+        const checkPath = (process.env.NODE_ENV === 'production') ? process.cwd()  : process.cwd() + '/test'
+        const checkDirs: string[] = await fs.readdir(checkPath);
 
         //**directores controller if the something go wrong*/
-
-        if (checkDirs.includes(name)) {
-            fs.rm(newPath, { recursive: true, force: true });
-        }
-
         if (checkDirs.includes(repoName)) {
             fs.rm(oldPath, { recursive: true, force: true });
+        }else if(checkDirs.includes(name)){
+            fs.rm(newPath, { recursive: true, force: true });
         }
     }
 };
