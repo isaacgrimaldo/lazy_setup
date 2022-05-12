@@ -1,32 +1,44 @@
-import { GlobalOptions } from '../../interfaces';
 import { exec } from 'child_process';
+import simpleGit, { Options, TaskOptions } from 'simple-git';
+import fs from 'fs/promises';
 
 import utils from 'util';
 const execAsync = utils.promisify(exec);
+
+import { GlobalOptions } from '../../interfaces';
+import { gitRepos } from './repos/index';
+
+const { soketSever } = gitRepos;
+
+/**
+ *
+ */
+const options: TaskOptions<Options> = {
+    baseDir: process.cwd(),
+    binary: 'git',
+    maxConcurrentProcesses: 6,
+};
+const git = simpleGit(options);
 
 /**
  *   generated new project with typescript
  */
 export const GenerateProjectTSC = async (prop: GlobalOptions) => {
     const { name } = prop;
-    const cwd = process.cwd();
+    const repoName = 'Socker-Server';
+    const cwd: string = process.cwd();
 
     try {
         /**bring the files from the git repository specified*/
-        await execAsync(
-            'git clone https://github.com/isaacgrimaldo/Socker-Server.git',
-            { cwd }
-        );
+        await git.clone(soketSever);
 
         /**rename the folder for the name project*/
-        await execAsync(`Ren Socker-Server ${name} `, {
-            cwd,
-        });
+        const oldPath = cwd + '/' + repoName;
+        const newPath = cwd + '/' + name;
+        await fs.rename(oldPath, newPath);
 
         /*deleted the git history of the new folder */
-        await execAsync('rmdir  .git /s /q', {
-            cwd: cwd + '/' + name,
-        });
+        await fs.rm(newPath + '/.git', { recursive: true, force: true });
 
         /**install dependencies from  npm*/
         console.log('\n' + '....installing dependencies wait a few moments');
@@ -43,7 +55,16 @@ export const GenerateProjectTSC = async (prop: GlobalOptions) => {
         console.log('move at the new directory "cd ' + name + '"' + '\n');
     } catch (error) {
         console.log(error);
-        const err = error as Error;
-        console.log(err);
+        const checkDirs: string[] = await fs.readdir(cwd);
+
+        //**directores controller if the something go wrong*/
+
+        if (checkDirs.includes(name)) {
+            fs.rm(cwd + '/' + name, { recursive: true, force: true });
+        }
+
+        if (checkDirs.includes(repoName)) {
+            fs.rm(cwd + '/' + repoName, { recursive: true, force: true });
+        }
     }
 };
