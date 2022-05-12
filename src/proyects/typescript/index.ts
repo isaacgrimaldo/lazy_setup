@@ -8,7 +8,7 @@ const execAsync = utils.promisify(exec);
 import { GlobalOptions } from '../../interfaces';
 import { gitRepos } from './repos/index';
 
-const { soketSever } = gitRepos;
+const { repo  } = gitRepos;
 
 /**
  *
@@ -24,13 +24,14 @@ const git = simpleGit(options);
  *   generated new project with typescript
  */
 export const GenerateProjectTSC = async (prop: GlobalOptions) => {
-    const { name } = prop;
-    const repoName = 'Socker-Server';
+    const { name, typeServer } = prop;
+    const repoName = 'server-setups';
     const cwd: string = process.cwd();
 
     try {
         /**bring the files from the git repository specified*/
-        await git.clone(soketSever);
+        const commands = ['clone' , '--branch' , typeServer , repo ]
+        await git.raw(commands)
 
         /**rename the folder for the name project*/
         const oldPath = cwd + '/' + repoName;

@@ -1,3 +1,3 @@
 export const gitRepos = {
-    soketSever: 'https://github.com/isaacgrimaldo/Socker-Server.git',
+    repo: 'https://github.com/isaacgrimaldo/server-setups.git',
 };
