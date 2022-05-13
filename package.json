@@ -1,8 +1,9 @@
 {
-  "name": "node_setup_cli",
+  "name": "server_cli",
   "version": "2.0.0",
-  "description": "cli to create new project with node.js ",
+  "description": "cli to create new server with express",
   "main": "/dist/index.js",
+  "bin": "/dist/index.js" ,
   "scripts": {
     "build": "npm  run  clear && tsc",
     "start": "cross-env NODE_ENV=production node dist/index.js",
@@ -10,7 +11,8 @@
     "clear": "rimraf  /dist",
     "checkout": "tsc  --watch",
     "prettier": " prettier --write ./src/*.ts",
-    "clean": "rimraf ./test/*"
+    "clean": "rimraf ./test/*",
+    "prepare": "npm run build"
   },
   "keywords": [
     "node",

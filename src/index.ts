@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import inquirer from 'inquirer';
 import { GlobalOptions } from './interfaces';
 import { setProject } from './proyect';
