@@ -9,9 +9,13 @@ if(process.env.NODE_ENV === "development" ){
     path = process.cwd();
 }
 
-export const gitRepos = {
-    repo: 'https://github.com/isaacgrimaldo/server-setups.git',
+export const gitReposTs = {
+    repo: 'https://github.com/isaacgrimaldo/server-setups-ts.git',
 };
+
+export const gitReposJs = {
+    repo: 'https://github.com/isaacgrimaldo/server-setups-js.git'
+}
 
 export const options: Partial<SimpleGitOptions> = {
     baseDir: path,

@@ -1,18 +1,16 @@
 import {config} from 'dotenv';
 config();
 
-import { exec } from 'child_process';
+import exec from '../helpers/exec';
 import simpleGit from 'simple-git';
 import fs from 'fs/promises';
 
-import utils from 'util';
-const execAsync = utils.promisify(exec);
 
 import { GlobalOptions } from '../../interfaces';
-import { gitRepos,  options } from './repos/index';
-import { paths } from './helpers/path';
+import { gitReposTs,  options } from '../repos';
+import { paths } from '../helpers/path';
 
-const { repo  } = gitRepos;
+const { repo  } = gitReposTs;
 const git = simpleGit(options);
 
 /**
@@ -20,7 +18,7 @@ const git = simpleGit(options);
  */
 export const GenerateProjectTSC = async (prop: GlobalOptions) => {
     const { name, typeServer } = prop;
-    const repoName = 'server-setups';
+    const repoName = 'server-setups-ts';
     const {newPath , oldPath} = paths(repoName ,  name); 
 
     try {
@@ -36,7 +34,7 @@ export const GenerateProjectTSC = async (prop: GlobalOptions) => {
 
         /**install dependencies from  npm*/
         console.log('\n' + '....installing dependencies wait a few moments');
-        await execAsync('npm  install', {
+        await exec('npm  install', {
             cwd: newPath,
         });
 
@@ -51,7 +49,7 @@ export const GenerateProjectTSC = async (prop: GlobalOptions) => {
         console.log(error);
         const checkPath = (process.env.NODE_ENV === 'production') ? process.cwd()  : process.cwd() + '/test'
         const checkDirs: string[] = await fs.readdir(checkPath);
-
+    3
         //**directores controller if the something go wrong*/
         if (checkDirs.includes(repoName)) {
             fs.rm(oldPath, { recursive: true, force: true });
