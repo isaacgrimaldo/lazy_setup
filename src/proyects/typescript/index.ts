@@ -1,49 +1,60 @@
-import { GlobalOptions } from '../../interfaces';
-import { exec } from 'child_process';
+import {config} from 'dotenv';
+config();
 
-import utils from 'util';
-const execAsync = utils.promisify(exec);
+import exec from '../helpers/exec';
+import simpleGit from 'simple-git';
+import fs from 'fs/promises';
+
+
+import { GlobalOptions } from '../../interfaces';
+import { gitReposTs,  options } from '../repos';
+import { paths } from '../helpers/path';
+
+const { repo  } = gitReposTs;
+const git = simpleGit(options);
 
 /**
  *   generated new project with typescript
  */
 export const GenerateProjectTSC = async (prop: GlobalOptions) => {
-    const { name } = prop;
-    const cwd = process.cwd();
+    const { name, typeServer } = prop;
+    const repoName = 'server-setups-ts';
+    const {newPath , oldPath} = paths(repoName ,  name); 
 
     try {
         /**bring the files from the git repository specified*/
-        await execAsync(
-            'git clone https://github.com/isaacgrimaldo/Socker-Server.git',
-            { cwd }
-        );
+        const commands = ['clone' , '--branch' , typeServer , repo ]
+        await git.raw(commands)
 
-        /**rename the folder for the name project*/
-        await execAsync(`Ren Socker-Server ${name} `, {
-            cwd,
-        });
+        /**rename the directory created for git clone*/
+        await fs.rename(oldPath, newPath);
 
         /*deleted the git history of the new folder */
-        await execAsync('rmdir  .git /s /q', {
-            cwd: cwd + '/' + name,
-        });
+        await fs.rm(newPath + '/.git', { recursive: true, force: true });
 
         /**install dependencies from  npm*/
         console.log('\n' + '....installing dependencies wait a few moments');
-        await execAsync('npm  install', {
-            cwd: cwd + '/' + name,
+        await exec('npm  install', {
+            cwd: newPath,
         });
 
         console.clear();
 
         console.log();
         console.log('finished the installation process');
-        console.log('server type: ' + 'socker-server');
+        console.log('server type: ' + typeServer);
         console.log('');
         console.log('move at the new directory "cd ' + name + '"' + '\n');
     } catch (error) {
         console.log(error);
-        const err = error as Error;
-        console.log(err);
+        const checkPath = (process.env.NODE_ENV === 'production') ? process.cwd()  : process.cwd() + '/test'
+        const checkDirs: string[] = await fs.readdir(checkPath);
+    3
+        //**directores controller if the something go wrong*/
+        if (checkDirs.includes(repoName)) {
+            fs.rm(oldPath, { recursive: true, force: true });
+        }else if(checkDirs.includes(name)){
+            fs.rm(newPath, { recursive: true, force: true });
+        }
     }
 };

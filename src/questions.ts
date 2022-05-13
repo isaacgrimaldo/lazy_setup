@@ -22,6 +22,6 @@ export const questions: any = [
         type: 'list',
         name: 'typeServer',
         message: 'set the server type',
-        choices: ['socket-server', 'simple-sever'],
+        choices: ['socket-server', 'simple-server'],
     },
 ];

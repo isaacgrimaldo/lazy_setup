@@ -1,21 +1,29 @@
 {
-  "name": "node_setup_cli",
-  "version": "2.0.0",
-  "description": "cli to create new project with node.js ",
+  "name": "lazy_setup",
+  "version": "0.0.2",
+  "description": "cli to create new server with express",
   "main": "/dist/index.js",
+  "bin": "/dist/index.js",
   "scripts": {
-    "build": "npm  run  clear && tsc",
-    "start": "node dist/index.js",
+    "build": "npm  run clear && tsc",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "dev": "cross-env NODE_ENV=development node dist/index.js",
     "clear": "rimraf  /dist",
     "checkout": "tsc  --watch",
-    "prettier": " prettier --write ./src/*.ts"
+    "prettier": " prettier --write ./src/*.ts",
+    "clean": "rimraf ./test/*",
+    "prepare": "run-s -l build & clean & npm run build"
   },
   "keywords": [
     "node",
     "cli",
     "javascript"
   ],
-  "author": "Isaac Grimaldo E",
+	"repository":{
+    "type": "git",
+    "url": "https://github.com/isaacgrimaldo/lazy_setup"
+  },
+  "author": "Isaac isaacgrimaldo432@gmail.com (https://www.linkedin.com/in/isaac-grimaldo-2a8782204/)",
   "license": "ISC",
   "devDependencies": {
     "@types/inquirer": "^8.2.0",
@@ -29,6 +37,9 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "inquirer": "^8.2.0"
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "inquirer": "^8.2.0",
+    "simple-git": "^3.7.1"
   }
 }
