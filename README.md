@@ -1,4 +1,4 @@
-# Node Setup  CLI 
+# Lazy Setup
 
 CLI to create new servers with node.js 
 

@@ -19,7 +19,11 @@
     "cli",
     "javascript"
   ],
-  "author": "Isaac Grimaldo E",
+	"repository":{
+    "type": "git",
+    "url": "https://github.com/isaacgrimaldo/lazy_setup"
+  },
+  "author": "Isaac isaacgrimaldo432@gmail.com (https://www.linkedin.com/in/isaac-grimaldo-2a8782204/)",
   "license": "ISC",
   "devDependencies": {
     "@types/inquirer": "^8.2.0",
